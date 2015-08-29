@@ -223,7 +223,8 @@
       }
     }
   },
-  "variables": {    
+  "variables": {
+    "templateBaseUrl": "https://raw.githubusercontent.com/mabsimms/arm-templates/master/uswest-arm/Templates/",
     "masterNodesIpPrefix": "10.2.1.1",
     "admin": {
       "user": "[parameters('adminUsername')]",
@@ -251,26 +252,26 @@
       }
     },
     "dataNodeAvailabilitySetName": "dataNodeAvailabilitySet",
-    "sharedTemplateUrl": "shared-resources.json",
-    "masterTemplateUrl": "master-nodes-resources.json",
-    "vnetUrl": "vnet-resources.json",
+    "sharedTemplateUrl": "[concat(variables('templateBaseUrl'), 'shared-resources.json')]",
+    "masterTemplateUrl": "[concat(variables('templateBaseUrl'), 'master-nodes-resources.json')]",
+    "vnetUrl": "[concat(variables('templateBaseUrl'), 'vnet-resources.json')]",    
     "clientTemplate0": "empty-resources.json",
     "clientTemplate3": "client-nodes-resources.json",
     "clientTemplate5": "client-nodes-resources.json",
     "clientTemplate7": "client-nodes-resources.json",
-    "clientTemplateUrl": "[variables(concat('clientTemplate',parameters('vmClientNodeCount')))]",
+    "clientTemplateUrl": "[concat(variables('templateBaseUrl'), variables(concat('clientTemplate',parameters('vmClientNodeCount'))))]",
     "dataTemplateStandard_D1": "data-nodes-2disk-resources.json",
     "dataTemplateStandard_A2": "data-nodes-4disk-resources.json",
     "dataTemplateStandard_A3": "data-nodes-8disk-resources.json",
     "dataTemplateStandard_A4": "data-nodes-16disk-resources.json",
     "dataTemplateStandard_A7": "data-nodes-16disk-resources.json",
-    "dataTemplateUrl": "[variables(concat('dataTemplate',parameters('vmSizeDataNodes')))]",
+    "dataTemplateUrl": "[concat(variables('templateBaseUrl'), variables(concat('dataTemplate',parameters('vmSizeDataNodes'))))]",
     "jumpboxTemplateYes": "jumpbox-resources.json",
     "jumpboxTemplateNo": "empty-resources.json",
-    "jumpboxTemplateUrl": "[variables(concat('jumpboxTemplate',parameters('jumpbox')))]",
+    "jumpboxTemplateUrl": "[concat(variables('templateBaseUrl'), variables(concat('jumpboxTemplate',parameters('jumpbox'))))]",
     "sshKeyPath": "[concat('/home/',parameters('adminUsername'),'/.ssh/authorized_keys')]",
     "ubuntuScripts": [
-      "elasticsearch-ubuntu-install.sh",
+      "[concat(variables('templateBaseUrl'), 'elasticsearch-ubuntu-install.sh')]",
       "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/shared_scripts/ubuntu/vm-disk-utils-0.1.sh"
     ],
     "ubuntuImageReference": {
