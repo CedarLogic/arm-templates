@@ -127,6 +127,12 @@
             "properties": {
               "addressPrefix": "[parameters('networkSettings').subnet.data.prefix]"
             }
+          },
+          {
+            "name": "[parameters('networkSettings').subnet.gateway.name]",
+            "properties": {
+              "addressPrefix": "[parameters('networkSettings').subnet.gateway.prefix]"
+            }
           }
         ]
       }
