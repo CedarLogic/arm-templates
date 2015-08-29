@@ -348,7 +348,7 @@
             "value": "[parameters('localGatewayAddressPrefix')]"
           },
           "gatewaySubnet": {
-            "value": "[variables('networkSettings').subnet.master]"
+            "value": "[variables('networkSettings').subnet.gateway]"
           },
           "gatewaySubnetPrefix": {
             "value": "[parameters('gatewaySubnetPrefix')]"
