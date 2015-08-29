@@ -315,10 +315,7 @@
       {
         "name": "vpn-gateway",
         "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/', 'shared')]"
-        ],
+        "apiVersion": "2015-01-01",        
         "properties": {
           "mode": "Incremental",
           "templateLink": {
