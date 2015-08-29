@@ -67,14 +67,10 @@
       }
     },
     "gatewaySubnet": {
-      "type": "string",
-      "defaultValue": "GatewaySubnet",
+      "type": "object",      
       "metadata": {
-        "description": "Name for gateway subnet in new VNet"
-      },
-      "allowedValues": [
-        "GatewaySubnet"
-      ]
+        "description": "Gateway VNET and subnet to deploy into"
+      }      
     },
     "gatewaySubnetPrefix": {
       "type": "string",
@@ -114,7 +110,7 @@
     }
   },
   "variables": {
-    "gatewaySubnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('gatewaySubnet').vnet), '/subnets/', parameters('gatewaySubnet').name)]"    
+    "gatewaySubnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('gatewaySubnet').vnet), '/subnets/', parameters('gatewaySubnet').name)]",    
   },
   "resources": [
      {
