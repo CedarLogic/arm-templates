@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="SampleWebApi" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+  <Role name="FrontEndRole">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=audiencevm;AccountKey=QpggMkjRoFUyADL+6lEzcArLYk53YAT3WZl6oOYCZcl6CkuP7K6SjgBemuTYZM90SikD2l8fo1NrRuX5d/d4vQ==" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="jetuser" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEEcKiJNzgIqZSFeFqgmRArIwDQYJKoZIhvcNAQEBBQAEggEAEL7AsuQZuNoK6XHJCMfNbFLj43TU9QhwgmvTZVzIJhAYrkzowznHU1IwolBcPRR+l1W5qTrGZnXZLt83rGglBOeuM9zADou0hNqnfBczN9Adrh4OzTMTgbq0PRHEMlpBHpR/eFiczwBSbJyB0+v0BodBPWzhZDIlZxuCWPr+msBP7ssnlfhOB7hEeWP4bqP9GPw9IrRhwtHf1o9EMJm1tz8n3LinnMOHVA/L3dfONSA3q3v9fkedXUTpNMfWGIPn3OS5/HxjIMkdcGS5ylZQ4FsDfMy5NWuRYhJaCtMHtVy+QZr/IobLprVPh5Cw3V+sxA9STE0TSJYLGf2Fg7K1czAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECHerLByk+O5fgBAnpwxnB6LRml6SCV1zd3xZ" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2016-08-27T23:59:59.0000000-07:00" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+    </ConfigurationSettings>
+    <Certificates>
+      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="4BA9B44B46DED7B8E6394367ACD71F7F1153928D" thumbprintAlgorithm="sha1" />
+    </Certificates>       
+  </Role>
+  <NetworkConfiguration>
+    <VirtualNetworkSite name="profx-fe-vnet" />
+    <AddressAssignments>
+      <InstanceAddress roleName="FrontEndRole">
+        <Subnets>
+          <Subnet name="profx-fe-worker"/>
+        </Subnets>
+      </InstanceAddress>
+    </AddressAssignments>          
+  </NetworkConfiguration>
+</ServiceConfiguration>

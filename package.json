@@ -1,0 +1,14 @@
+{
+  "name": "jetdeploy",
+  "version": "1.0.0",
+  "description": "Deploy stuff",
+  "main": "deploy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "azure-scripty": "^1.0.1"
+  }
+}
