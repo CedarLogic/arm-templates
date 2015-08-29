@@ -254,7 +254,7 @@
     "dataNodeAvailabilitySetName": "dataNodeAvailabilitySet",
     "sharedTemplateUrl": "[concat(variables('templateBaseUrl'), 'shared-resources.json')]",
     "masterTemplateUrl": "[concat(variables('templateBaseUrl'), 'master-nodes-resources.json')]",
-    "vnetUrl": "[concat(variables('templateBaseUrl'), 'vnet-resources.json')]",    
+    "vnetUrl": "[concat(variables('templateBaseUrl'), 'vnet-resources.json')]",
     "clientTemplate0": "empty-resources.json",
     "clientTemplate3": "client-nodes-resources.json",
     "clientTemplate5": "client-nodes-resources.json",
@@ -312,282 +312,285 @@
     "dataLBSettings": "[variables(concat('dataLBSettings', parameters('vmClientNodeCount')))]"
   },
   "resources": [
-      {
-        "name": "vpn-gateway",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/', 'shared')]"
-        ],
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('vnetUrl')]",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-            "enableBgp": {
-              "value": "false"
-            },
-            "gatewayType": {
-              "value": "Vpn"
-            },
-            "vpnType": {
-              "value": "RouteBased"
-            },
-            "localGatewayName": {
-              "value": "[parameters('localGatewayName')]"
-            },
-            "localGatewayIpAddress": {
-              "value": "[parameters('localGatewayIpAddress')]"
-            },
-            "localGatewayAddressPrefix": {
-              "value": "[parameters('localGatewayAddressPrefix')]"
-            },
-            "gatewaySubnet": {
-              "value": "[variables('networkSettings').subnet.master]"
-            },
-            "gatewaySubnetPrefix": {
-              "value": "[parameters('gatewaySubnetPrefix')]"
-            },
-            "gatewayPublicIPName": {
-              "value": "[parameters('gatewayPublicIPName')]"
-            },
-            "gatewayName": {
-              "value": "[parameters('gatewayName')]"
-            },
-            "connectionName": {
-              "value": "[parameters('connectionName')]"
-            },
-            "sharedKey": {
-              "value": "[parameters('sharedKey')]"
-            },
-            "virtualNetworkName": {
-              "value": "[parameters('virtualNetworkName')]"
-            }
-          }
-        }
-      },
-      {
-        "name": "master-nodes",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/', 'shared')]"
-        ],
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('masterTemplateUrl')]",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-            "storageAccountName": {
-              "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
-            },
-            "adminUsername": {
-              "value": "[parameters('adminUsername')]"
-            },
-            "adminPassword": {
-              "value": "[parameters('adminPassword')]"
-            },
-            "masterNodesIpPrefix": {
-              "value": "[variables('masterNodesIpPrefix')]"
-            },
-            "region": {
-              "value": "[parameters('region')]"
-            },
-            "vmSize": {
-              "value": "[parameters('vmSizeMasterNodes')]"
-            },
-            "subnet": {
-              "value": "[variables('networkSettings').subnet.master]"
-            },
-            "osSettings": {
-              "value": "[variables('osSettings')]"
-            },
-            "esSettings": {
-              "value": "[variables('esSettings')]"
-            }
-          }
-        }
-      },
-      {
-        "name": "shared",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('sharedTemplateUrl')]",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-            "region": {
-              "value": "[parameters('region')]"
-            },
-            "networkSettings": {
-              "value": "[variables('networkSettings')]"
-            },
-            "esDataHaSetName": {
-              "value": "[variables('dataNodeAvailabilitySetName')]"
-            },
-            "storageAccountName": {
-              "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
-            },
-            "loadBalancerType": {
-              "value": "[parameters('loadBalancerType')]"
-            },
-            "ilbIpAddress": {
-              "value": "10.0.0.100"
-            },
-            "dnsName": {
-              "value": "[parameters('dnsNameforLBIP')]"
-            }
-          }
-        }
-      },
-      {
-        "name": "client-nodes",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/', 'shared')]"
-        ],
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('clientTemplateUrl')]",
-            "contentVersion": "1.0.0.0"
-          },
-          "parameters": {
-            "adminUsername": {
-              "value": "[parameters('adminUsername')]"
-            },
-            "adminPassword": {
-              "value": "[parameters('adminPassword')]"
-            },
-            "storageAccountName": {
-              "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
-            },
-            "region": {
-              "value": "[parameters('region')]"
-            },
-            "subnet": {
-              "value": "[variables('networkSettings').subnet.data]"
-            },
-            "vmSize": {
-              "value": "[parameters('vmSizeClientNodes')]"
-            },
-            "esSettings": {
-              "value": "[variables('esSettings')]"
-            },
-            "osSettings": {
-              "value": "[variables('osSettings')]"
-            },
-            "vmCount": {
-              "value": "[parameters('vmClientNodeCount')]"
-            },
-            "lbBackendPools": {
-              "value": "[variables('lbBackEndPoolsAdded')]"
-            }
-          }
-        }
-      },
-      {
-        "name": "[concat('data-nodes',copyindex())]",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/', 'shared')]"
-        ],
-        "copy": {
-          "name": "dataScaleGroupLoop",
-          "count": "[parameters('dataNodeScaleUnits')]"
+    {
+      "name": "vpn-gateway",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'shared')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vnetUrl')]",
+          "contentVersion": "1.0.0.0"
         },
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('dataTemplateUrl')]",
-            "contentVersion": "1.0.0.0"
+        "parameters": {
+         "region": {
+            "value": "[parameters('region')]"
           },
-          "parameters": {
-            "adminUsername": {
-              "value": "[parameters('adminUsername')]"
-            },
-            "adminPassword": {
-              "value": "[parameters('adminPassword')]"
-            },
-            "storageAccountName": {
-              "value": "[concat(parameters('storageAccountPrefix'),'su', copyindex())]"
-            },
-            "region": {
-              "value": "[parameters('region')]"
-            },
-            "subnet": {
-              "value": "[variables('networkSettings').subnet.data]"
-            },
-            "vmSize": {
-              "value": "[parameters('vmSizeDataNodes')]"
-            },
-            "dataNodes": {
-              "value": "[parameters('dataNodesPerUnit')]"
-            },
-            "esSettings": {
-              "value": "[variables('esSettings')]"
-            },
-            "dataDiskSize": {
-              "value": "[parameters('dataDiskSize')]"
-            },
-            "groupName": {
-              "value": "[concat('su', copyindex(), 'n')]"
-            },
-            "availabilitySet": {
-              "value": "[variables('dataNodeAvailabilitySetName')]"
-            },
-            "osSettings": {
-              "value": "[variables('osSettings')]"
-            },
-            "lbBackendPools": {
-              "value": "[variables('dataLBSettings')]"
-            }
-          }
-        }
-      },
-      {
-        "name": "jumpbox",
-        "type": "Microsoft.Resources/deployments",
-        "apiVersion": "2015-01-01",
-        "dependsOn": [
-          "[concat('Microsoft.Resources/deployments/', 'shared')]"
-        ],
-        "properties": {
-          "mode": "Incremental",
-          "templateLink": {
-            "uri": "[variables('jumpboxTemplateUrl')]",
-            "contentVersion": "1.0.0.0"
+          "enableBgp": {
+            "value": "false"
           },
-          "parameters": {
-            "storageAccountName": {
-              "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
-            },
-            "adminUsername": {
-              "value": "[parameters('adminUsername')]"
-            },
-            "adminPassword": {
-              "value": "[parameters('adminPassword')]"
-            },
-            "region": {
-              "value": "[parameters('region')]"
-            },
-            "subnet": {
-              "value": "[variables('networkSettings').subnet.data]"
-            },
-            "osSettings": {
-              "value": "[variables('osSettings')]"
-            }
+          "gatewayType": {
+            "value": "Vpn"
+          },
+          "vpnType": {
+            "value": "RouteBased"
+          },
+          "localGatewayName": {
+            "value": "[parameters('localGatewayName')]"
+          },
+          "localGatewayIpAddress": {
+            "value": "[parameters('localGatewayIpAddress')]"
+          },
+          "localGatewayAddressPrefix": {
+            "value": "[parameters('localGatewayAddressPrefix')]"
+          },
+          "gatewaySubnet": {
+            "value": "[variables('networkSettings').subnet.master]"
+          },
+          "gatewaySubnetPrefix": {
+            "value": "[parameters('gatewaySubnetPrefix')]"
+          },
+          "gatewayPublicIPName": {
+            "value": "[parameters('gatewayPublicIPName')]"
+          },
+          "gatewayName": {
+            "value": "[parameters('gatewayName')]"
+          },
+          "connectionName": {
+            "value": "[parameters('connectionName')]"
+          },
+          "sharedKey": {
+            "value": "[parameters('sharedKey')]"
+          },
+          "virtualNetworkName": {
+            "value": "[parameters('virtualNetworkName')]"
           }
         }
       }
-      ]
+    },
+    {
+      "name": "master-nodes",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'shared')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('masterTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "masterNodesIpPrefix": {
+            "value": "[variables('masterNodesIpPrefix')]"
+          },
+          "region": {
+            "value": "[parameters('region')]"
+          },
+          "vmSize": {
+            "value": "[parameters('vmSizeMasterNodes')]"
+          },
+          "subnet": {
+            "value": "[variables('networkSettings').subnet.master]"
+          },
+          "osSettings": {
+            "value": "[variables('osSettings')]"
+          },
+          "esSettings": {
+            "value": "[variables('esSettings')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "shared",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('sharedTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "region": {
+            "value": "[parameters('region')]"
+          },
+          "networkSettings": {
+            "value": "[variables('networkSettings')]"
+          },
+          "esDataHaSetName": {
+            "value": "[variables('dataNodeAvailabilitySetName')]"
+          },
+          "storageAccountName": {
+            "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
+          },
+          "loadBalancerType": {
+            "value": "[parameters('loadBalancerType')]"
+          },
+          "ilbIpAddress": {
+            "value": "10.0.0.100"
+          },
+          "dnsName": {
+            "value": "[parameters('dnsNameforLBIP')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "client-nodes",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'shared')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('clientTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "storageAccountName": {
+            "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
+          },
+          "region": {
+            "value": "[parameters('region')]"
+          },
+          "subnet": {
+            "value": "[variables('networkSettings').subnet.data]"
+          },
+          "vmSize": {
+            "value": "[parameters('vmSizeClientNodes')]"
+          },
+          "esSettings": {
+            "value": "[variables('esSettings')]"
+          },
+          "osSettings": {
+            "value": "[variables('osSettings')]"
+          },
+          "vmCount": {
+            "value": "[parameters('vmClientNodeCount')]"
+          },
+          "lbBackendPools": {
+            "value": "[variables('lbBackEndPoolsAdded')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "[concat('data-nodes',copyindex())]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'shared')]"
+      ],
+      "copy": {
+        "name": "dataScaleGroupLoop",
+        "count": "[parameters('dataNodeScaleUnits')]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('dataTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "storageAccountName": {
+            "value": "[concat(parameters('storageAccountPrefix'),'su', copyindex())]"
+          },
+          "region": {
+            "value": "[parameters('region')]"
+          },
+          "subnet": {
+            "value": "[variables('networkSettings').subnet.data]"
+          },
+          "vmSize": {
+            "value": "[parameters('vmSizeDataNodes')]"
+          },
+          "dataNodes": {
+            "value": "[parameters('dataNodesPerUnit')]"
+          },
+          "esSettings": {
+            "value": "[variables('esSettings')]"
+          },
+          "dataDiskSize": {
+            "value": "[parameters('dataDiskSize')]"
+          },
+          "groupName": {
+            "value": "[concat('su', copyindex(), 'n')]"
+          },
+          "availabilitySet": {
+            "value": "[variables('dataNodeAvailabilitySetName')]"
+          },
+          "osSettings": {
+            "value": "[variables('osSettings')]"
+          },
+          "lbBackendPools": {
+            "value": "[variables('dataLBSettings')]"
+          }
+        }
+      }
+    },
+    {
+      "name": "jumpbox",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', 'shared')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('jumpboxTemplateUrl')]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "storageAccountName": {
+            "value": "[concat(parameters('storageAccountPrefix'),'shared')]"
+          },
+          "adminUsername": {
+            "value": "[parameters('adminUsername')]"
+          },
+          "adminPassword": {
+            "value": "[parameters('adminPassword')]"
+          },
+          "region": {
+            "value": "[parameters('region')]"
+          },
+          "subnet": {
+            "value": "[variables('networkSettings').subnet.data]"
+          },
+          "osSettings": {
+            "value": "[variables('osSettings')]"
+          }
+        }
+      }
+    }
+  ]
     }
