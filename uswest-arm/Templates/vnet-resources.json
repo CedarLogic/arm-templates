@@ -114,7 +114,7 @@
     }
   },
   "variables": {
-    "gatewaySubnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName').vnet), '/subnets/', parameters('gatewaySubnet').name)]"    
+    "gatewaySubnetRef": "[concat(resourceId('Microsoft.Network/virtualNetworks', parameters('gatewaySubnet').vnet), '/subnets/', parameters('gatewaySubnet').name)]"    
   },
   "resources": [
      {
