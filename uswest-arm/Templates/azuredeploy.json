@@ -361,7 +361,10 @@
             },
             "sharedKey": {
               "value": "[parameters('sharedKey')]"
-            }           
+            },
+            "virtualNetworkName": {
+              "value": "[parameters('virtualNetworkName')]"
+            }
           }
         }
       },
