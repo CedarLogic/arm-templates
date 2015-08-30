@@ -58,6 +58,18 @@ Step 5.1: create the local network (corresponding to the paas network)
 
 # Created VIP 137.116.83.119
 
+####################################################################################
+# TODO - do this in CLI
+# Fix up the network gateway if necessary
+Remove-AzureLocalNetworkGateway -ResourceGroupName profx-sec -Name paas-gateway-remote
+New-AzureLocalNetworkGateway -ResourceGroupName profx-sec -Name paas-gateway-remote -Location "East US 2" -AddressPrefix "10.1.0.0/16" -GatewayIpAddress "104.209.190.13" 
+
+# Create the virtual network gateway connection
+$vnetLocalGw = Get-AzureLocalNetworkGateway -ResourceGroupName profx-sec -Name paas-gateway-remote
+$vnetVirtualGw = Get-AzureVirtualNetworkGateway -ResourceGroupName profx-sec -Name paas1-gateway
+
+New-AzureVirtualNetworkGatewayConnection -Name fe-be-connection -ResourceGroupName profx-sec -Location "East US 2" -VirtualNetworkGateway1 $vnetVirtualGw -LocalNetworkGateway2 $vnetLocalGw -ConnectionType IPsec -RoutingWeight 10  -SharedKey 'abc123'
+
 
 
 # Clean up all resources associated with profx-sec
