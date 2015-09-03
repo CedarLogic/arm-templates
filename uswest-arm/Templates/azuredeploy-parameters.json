@@ -3,10 +3,10 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "dnsNameforLBIP": {
-      "value": "profx-sec"
+      "value": "profx-load"
     },
     "storageAccountPrefix": {
-      "value": "psec"
+      "value": "psecload"
     },
     "adminUsername": {
       "value": "jetuser"
@@ -14,53 +14,23 @@
     "adminPassword": {
       "value": "Argle!@#"
     },
-    "dataNodeScaleUnits": {
-      "value": 1
-    },
-    "dataNodesPerUnit": {
+    "serverNodeCount": {
       "value": 3
-    },
+    },    
     "region": {
       "value": "East US 2"
     },
     "virtualNetworkName": {
-      "value": "profx-sec"
+      "value": "profx-load"
     },
-    "esClusterName": {
-      "value": "profx-sec-es"
+    "serverClusterName": {
+      "value": "profx-lt"
     },
     "loadBalancerType": {
       "value": "external"
     },
     "vmSizeDataNodes": {
       "value": "Standard_D1"
-    },
-    "vmClientNodeCount": {
-      "value": 0
-    },
-    "localGatewayName": {
-      "value": "paas1-gateway-remote"
-    },
-    "localGatewayIpAddress": {
-      "value": "104.209.190.13"
-    },
-    "localGatewayAddressPrefix": {
-      "value": "10.1.2.0"
-    },   
-    "gatewaySubnetPrefix": {
-      "value": "16"
-    },
-    "gatewayPublicIPName": {
-      "value": "paas1-gateway"
-    },
-    "gatewayName": {
-      "value": "paas1-gateway"
-    },
-    "sharedKey": {
-      "value": "TPDP"
-    },
-    "connectionName": {
-      "value": "paas-connection"
     }
   }
 }

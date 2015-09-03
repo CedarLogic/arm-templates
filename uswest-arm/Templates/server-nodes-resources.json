@@ -43,19 +43,19 @@
       "type": "string",
       "defaultValue": "Standard_A0",
       "metadata": {
-        "description": "Size of the Elasticsearch master nodes"
+        "description": "Size of the JMeter server nodes"
       }
     },
     "esSettings": {
       "type": "object",
       "metadata": {
-        "description": "Elasticsearch settings - cluster name, version, discovery hosts"
+        "description": "JMeter settings - cluster name, version, discovery hosts"
       }
     },
     "osSettings": {
       "type": "object",
       "metadata": {
-        "description": "Elasticsearch deployment platform settings"
+        "description": "JMeter deployment platform settings"
       }
     }
   },
@@ -69,7 +69,7 @@
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/availabilitySets",
-      "name": "elasticsearchMaster",
+      "name": "jMeterServer",
       "location": "[parameters('region')]",
       "properties": {}
     },
@@ -118,7 +118,7 @@
           "vmSize": "[parameters('vmSize')]"
         },
         "osProfile": {
-          "computername": "[concat('esMaster', copyIndex())]",
+          "computername": "[concat('jmeterServer-', copyIndex())]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
@@ -161,7 +161,7 @@
         "typeHandlerVersion": "1.2",
         "settings": {
           "fileUris": "[parameters('osSettings').scripts]",
-          "commandToExecute": "[concat('bash elasticsearch-ubuntu-install.sh -xn ', parameters('esSettings').clusterName, ' -v ', parameters('esSettings').version, ' -d ', parameters('esSettings').discoveryHosts)]"
+          "commandToExecute": "[concat('bash jmeter-ubuntu-install.sh -xn ')]"
         }
       }
     }
