@@ -265,6 +265,7 @@
     "dataTemplateStandard_A2": "data-nodes-4disk-resources.json",
     "dataTemplateStandard_A3": "data-nodes-8disk-resources.json",
     "dataTemplateStandard_A4": "data-nodes-16disk-resources.json",
+    "dataTemplateStandard_DS4": "data-nodes-16disk-resources.json",
     "dataTemplateStandard_A7": "data-nodes-16disk-resources.json",
     "dataTemplateUrl": "[concat(variables('templateBaseUrl'), variables(concat('dataTemplate',parameters('vmSizeDataNodes'))))]",
     "jumpboxTemplateYes": "jumpbox-resources.json",
